@@ -701,6 +701,40 @@
                     </div>
                   </div>
 
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="paymentMethod"><i class="bi bi-credit-card-fill mr-1"></i> Payment method</label>
+                      <select class="form-control" id="paymentMethod" required>
+                        <option value="">Choose a payment method</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="Debit">Debit</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Apple Pay">Apple Pay</option>
+                      </select>
+                      <div class="invalid-feedback">Please select a payment method.</div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                      <label for="referralSource"><i class="bi bi-megaphone-fill mr-1"></i> How did you hear about us?</label>
+                      <select class="form-control" id="referralSource" required>
+                        <option value="">Choose an option</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="Google">Google</option>
+                        <option value="Friend / Referral">Friend / Referral</option>
+                        <option value="Walk-in">Walk-in</option>
+                      </select>
+                      <div class="invalid-feedback">Please let us know how you found us.</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="policyAgree" required>
+                      <label class="custom-control-label" for="policyAgree">I agree to the 24-hour cancellation policy</label>
+                      <div class="invalid-feedback">You must agree before booking.</div>
+                    </div>
+                  </div>
+
                   <div class="d-flex justify-content-between align-items-center mt-3">
                     <button class="btn btn-outline-secondary" type="button" id="btnBackToDate">
                       <i class="bi bi-arrow-left mr-1"></i> Back
