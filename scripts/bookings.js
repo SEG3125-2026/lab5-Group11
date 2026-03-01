@@ -9,6 +9,7 @@ const state = {
   serviceName: "",
   servicePrice: 0,
   serviceDuration: 0,
+  professional: "",
   date: "",
   time: "",
   fullName: "",
@@ -25,6 +26,7 @@ const btnSubmit = document.getElementById("btnSubmit");
 const dateInput = document.getElementById("dateInput");
 const timeSelect = document.getElementById("timeSelect");
 const durationHint = document.getElementById("durationHint");
+const proSelect = document.getElementById("proSelect");
 const step2Btn = document.querySelector('#headingDate button');
 const step3Btn = document.querySelector('#headingInfo button');
 
@@ -42,8 +44,9 @@ step2Btn.addEventListener("click", (e) => {
   }
 })
 
+//modifed
 step3Btn.addEventListener("click", function(e) {
-  if(!(state.date && state.time)) {
+  if(!(state.professional && state.date && state.time)) {
     e.stopPropagation();
   }
 });
@@ -75,6 +78,11 @@ function updateSummary() {
   } else {
     parts.push(`<strong>When:</strong> not selected`);
   }
+  if (state.professional) {
+    parts.push(`<strong>Professional:</strong> ${state.professional}`);
+  } else {
+    parts.push(`<strong>Professional:</strong> not selected`);
+  }
 
   summaryText.innerHTML = "You chose…<br>" + parts.join("<br>");
 }
@@ -103,18 +111,64 @@ function buildTimeslots() {
   timeSelect.disabled = false;
 }
 
+//Addeds
+function buildProfessionalsForService(serviceName) {
+  let pros = [
+    { value: "Ava Chen", label: "Ava Chen — Senior Stylist (Short/Medium cuts)" },
+    { value: "Marco Silva", label: "Marco Silva — Color Specialist (Balayage/Gloss)" },
+    { value: "Sam Patel", label: "Sam Patel — Stylist (Long hair & styling)" }
+  ];
+  // Reorder professionals based on service type 
+  if (serviceName === "Color Refresh") {
+    pros = [
+      pros[1], pros[0], pros[2]
+    ];
+  } else if (serviceName === "Long Cut") {
+    pros = [
+      pros[2], pros[0], pros[1]
+    ];
+  } else {
+    //default
+    pros = [
+      pros[0], pros[2], pros[1]
+    ];
+  }
+
+  proSelect.innerHTML =
+    `<option value="">Choose a professional</option>` +
+    pros.map(p => `<option value="${p.value}">${p.label}</option>`).join("");
+
+  proSelect.disabled = false;
+}
+
+function resetStep2Inputs() {
+  state.professional = "";
+  proSelect.value = "";
+  proSelect.innerHTML = `<option value="">Select a service first</option>`;
+  proSelect.disabled = true;
+
+  state.date = "";
+  state.time = "";
+  dateInput.value = "";
+  dateInput.disabled = true;
+
+  timeSelect.innerHTML = `<option value="">Select a date first</option>`;
+  timeSelect.disabled = true;
+}
+//modified
 function validateStep2() {
-  const ready = Boolean(state.date && state.time);
+  const ready = Boolean(state.professional && state.date && state.time);
   btnToInfo.style.display = ready ? "inline-flex" : "none";
-  
+
   // progress bar
-  if(state.serviceName && ready){
+  if (state.serviceName && ready) {
     setProgress(66, "Step 2 of 3");
-  } else if (state.serviceName){
+  } else if (state.serviceName) {
     setProgress(33, "Step 1 of 3");
-  }else {
+  } else {
     setProgress(0, "Step 1 of 3");
   }
+
   updateSummary();
 }
 
@@ -128,9 +182,10 @@ function validateFormReadiness() {
     emailOk &&
     phoneOk &&
     state.serviceName &&
+    state.professional &&
     state.date &&
     state.time
-  );
+);
 
   const step3Ready = !btnSubmit.disabled;
   if (step3Ready) {
@@ -147,12 +202,15 @@ document.querySelectorAll('input[name="service"]').forEach(radio => {
     state.servicePrice = Number(el.dataset.price);
     state.serviceDuration = Number(el.dataset.duration);
 
+    //modified
     durationHint.textContent = `Estimated duration: ${state.serviceDuration} minutes.`;
     btnToDate.style.display = "inline-flex";
     setProgress(33, "Step 1 of 3");
+    resetStep2Inputs();
+    buildProfessionalsForService(state.serviceName);
     dateInput.disabled = false;
     updateSummary();
-  });
+      });
 });
 
 btnToDate.addEventListener("click", () => openAccordion("#collapseDate"));
@@ -171,6 +229,11 @@ dateInput.addEventListener("change", () => {
   state.time = "";
   buildTimeslots();
   timeSelect.value = "";
+  validateStep2();
+});
+
+proSelect.addEventListener("change", () => {
+  state.professional = proSelect.value;
   validateStep2();
 });
 
@@ -201,6 +264,7 @@ bookingForm.addEventListener("submit", (e) => {
 
   confirmDetails.innerHTML = `
     <div><strong>Service:</strong> ${state.serviceName} (${money(state.servicePrice)})</div>
+    <div><strong>Professional:</strong> ${escapeHtml(state.professional)}</div>
     <div><strong>Date:</strong> ${state.date}</div>
     <div><strong>Time:</strong> ${state.time}</div>
     <div><strong>Name:</strong> ${escapeHtml(state.fullName)}</div>
@@ -217,12 +281,10 @@ document.getElementById("btnStartOver").addEventListener("click", () => {
   state.serviceName = "";
   state.servicePrice = 0;
   state.serviceDuration = 0;
+  state.professional = "";
   state.date = "";
   state.time = "";
-  state.fullName = "";
-  state.email = "";
-  state.phone = "";
-  state.notes = "";
+  
 
   document.querySelectorAll('input[name="service"]').forEach(r => (r.checked = false));
   btnToDate.style.display = "none";
@@ -232,6 +294,9 @@ document.getElementById("btnStartOver").addEventListener("click", () => {
   timeSelect.innerHTML = `<option value="">Select a date first</option>`;
   timeSelect.disabled = true;
 
+  proSelect.innerHTML = `<option value="">Select a service first</option>`;
+  proSelect.disabled = true;
+  
   ["fullName", "email", "phone", "notes"].forEach(id => (document.getElementById(id).value = ""));
   bookingForm.classList.remove("was-validated");
   btnSubmit.disabled = true;
@@ -240,6 +305,7 @@ document.getElementById("btnStartOver").addEventListener("click", () => {
   updateSummary();
   openAccordion("#collapseService");
 });
+
 
 function escapeHtml(str) {
   return String(str)
