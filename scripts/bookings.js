@@ -84,7 +84,9 @@ function updateSummary() {
     parts.push(`<strong>Professional:</strong> not selected`);
   }
 
-  summaryText.innerHTML = "You chose…<br>" + parts.join("<br>");
+  if(summaryText){
+    summaryText.innerHTML = "You chose…<br>" + parts.join("<br>");
+  }
 }
 
 function openAccordion(targetId) {
@@ -309,11 +311,11 @@ document.getElementById("btnStartOver").addEventListener("click", () => {
 
 function escapeHtml(str) {
   return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replace("&", "&amp;")
+    .replace("<", "&lt;")
+    .replace(">", "&gt;")
+    .replace('"', "&quot;")
+    .replace("'", "&#039;");
 }
 
 // Initial summary
@@ -339,4 +341,45 @@ $(document).ready(function (){
       pause:"hover"
     });
   }
+});
+
+//Join Validation
+window.addEventListener("DOMContentLoaded", () => {
+  const joinForm= document.getElementById("joinForm");
+  const joinEmail= document.getElementById("joinEmail");
+  const joinMsg= document.getElementById("joinMsg");
+
+  if(!joinForm || !joinEmail || !joinMsg) return;
+  joinForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    joinMsg.innerHTML= "";
+    
+    if(!joinEmail.checkValidity()){
+      joinForm.classList.add("was-validated");
+      //joinMsg.innerHTML=`<div class="text-danger mt-2"> Please enter your email (e.g., you@example.com)</div>`;
+      joinEmail.focus();
+      return;
+    }
+
+    joinForm.classList.remove("was-validated");
+    joinEmail.classList.remove("is-invalid");
+    joinEmail.classList.add("is-valid");
+    joinMsg.innerHTML= `
+      <div class="alert alert-success mt-3 mb-0" role="alert">
+        <strong>Welcome to Lumière Salon.</strong> You're on the list
+      </div>
+    `;
+    //joinMsg.className="mt-2 text-success";
+    //alert("You have successfully joined!");
+
+    //joinMsg.scrollIntoView({behavior: "smooth", block: "center"});
+
+  
+    setTimeout(() => {
+      joinEmail.value="";
+      joinEmail.classList.remove("is-valid");
+      joinMsg.innerHTML="";
+    }, 6000);
+
+  });
 });

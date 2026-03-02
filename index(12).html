@@ -622,29 +622,29 @@
 
                 <div class="form-row">
  
-                <div class="form-group col-md-6">
-                  <label for="proSelect"><i class="bi bi-person-badge mr-1"></i> Professional</label>
-                  <select class="form-control" id="proSelect" disabled>
-                    <option value="">Select a service first</option>
-                  </select>
-                  <small class="form-text text-muted" id="proHint">Pick who you want for your appointment.</small>
-                </div>
+                  <div class="form-group col-md-6">
+                   <label for="proSelect"><i class="bi bi-person-badge mr-1"></i> Professional</label>
+                    <select class="form-control" id="proSelect" disabled>
+                      <option value="">Select a service first</option>
+                    </select>
+                    <small class="form-text text-muted" id="proHint">Pick who you want for your appointment.</small>
+                  </div>
 
-                <div class="form-group col-md-6">
-                  <label for="dateInput"><i class="bi bi-calendar-event mr-1"></i> Date</label>
-                  <input class="form-control" type="date" id="dateInput" disabled/>
-                  <small class="form-text text-muted">We’re open Tue–Sun.</small>
-                </div>
+                  <div class="form-group col-md-6">
+                    <label for="dateInput"><i class="bi bi-calendar-event mr-1"></i> Date</label>
+                    <input class="form-control" type="date" id="dateInput" disabled/>
+                    <small class="form-text text-muted">We’re open Tue–Sun.</small>
+                  </div>
 
-                <div class="form-group col-md-6">
-                  <label for="timeSelect"><i class="bi bi-clock mr-1"></i> Time</label>
-                  <select class="form-control" id="timeSelect" disabled>
-                    <option value="">Select a date first</option>
-                  </select>
-                  <small class="form-text text-muted" id="durationHint">Duration depends on service.</small>
-                </div>
+                  <div class="form-group col-md-6">
+                    <label for="timeSelect"><i class="bi bi-clock mr-1"></i> Time</label>
+                    <select class="form-control" id="timeSelect" disabled>
+                      <option value="">Select a date first</option>
+                    </select>
+                    <small class="form-text text-muted" id="durationHint">Duration depends on service.</small>
+                  </div>
 
-              </div>
+                </div>
 
                 <div class="d-flex justify-content-between align-items-center mt-3">
                   <button class="btn btn-outline-secondary" type="button" id="btnBackToService">
@@ -676,7 +676,7 @@
                       <label for="fullName"><i class="bi bi-person-fill mr-1"></i> Full name</label>
                       <input class="form-control" id="fullName" type="text" placeholder="e.g., Jordan Lee" required/>
                       <div class="invalid-feedback">Please enter your name.</div>
-                    </div>
+                    </div>     
 
                     <div class="form-group col-md-6">
                       <label for="email"><i class="bi bi-envelope-fill mr-1"></i> Email</label>
@@ -805,13 +805,16 @@
           <p class="hurr-p mb-0">Be the first to know when we release last-minute appointments and seasonal promos.</p>
         </div>
 
-        <div class="col-lg-5">
-          <form class="hurr-newsletter" onsubmit="return false;">
-            <input class="form-control" type="email" placeholder="Email address" aria-label="Email address"/>
-            <button class="btn btn-dark hurr-btn" type="button">Join</button>
-          </form>
-          <div class="hurr-small">No spam. Unsubscribe anytime.</div>
-        </div>
+
+        <form id="joinForm" class="hurr-newsletter" novalidate>
+          <div class="form-group mb-2">
+            <input id="joinEmail" class="form-control" type="email" placeholder="you@example.com" aria-label="Email address" required />
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          </div>
+          <button id="joinBtn" class="btn btn-dark hurr-btn mt-3" type="submit">Join</button>
+          <small class="form-text text-muted mt-2">No spam. Unsubscribe anytime.</small>
+          <div id="joinMsg" class="mt-2" aria-live="polite"></div>
+        </form>
       </div>
     </div>
   </section>
